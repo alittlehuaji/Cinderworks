@@ -1,0 +1,13 @@
+name = "HapppyMC Ember Client Mod Pack"
+author = "alittlehuaji"
+version = "0.1.0"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "38273246a72bc393037afb1ea0fd9ade8a33b736488b0f11d2c6853cc8929315"
+
+[versions]
+minecraft = "1.21.1"
+neoforge = "21.1.235"

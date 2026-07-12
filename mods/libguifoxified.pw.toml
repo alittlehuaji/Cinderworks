@@ -1,0 +1,13 @@
+name = "LibGuiFoxified"
+filename = "LibGuiFoxified-0.1.1+11.1.0+1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/22KkUI0A/versions/pqCFGvUn/LibGuiFoxified-0.1.1%2B11.1.0%2B1.21.1.jar"
+hash-format = "sha512"
+hash = "4817cea31c2d19d9a57c1ac7a37500b34afb7d8c9177385d7a3fff451bdee6b4b4d3c584cbec49f101f8be56899300c9909a1b4c2f10028eb061426082ab5ca3"
+
+[update]
+[update.modrinth]
+mod-id = "22KkUI0A"
+version = "pqCFGvUn"

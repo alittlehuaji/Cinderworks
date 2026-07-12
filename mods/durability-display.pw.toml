@@ -1,0 +1,13 @@
+name = "DurabilityDisplay"
+filename = "duradisplay-1.21.1-NeoForge-2.1.1.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/hjotWeH6/versions/y2BgmG9u/duradisplay-1.21.1-NeoForge-2.1.1.jar"
+hash-format = "sha512"
+hash = "1554411ae324cc3b197cd0336b2098cfffcb11048f28f9ca108e52d6bb091302e1f91e7b310361e62aa882c97a005c6c2b70e2caa9947ce15e73cab6073366a5"
+
+[update]
+[update.modrinth]
+mod-id = "hjotWeH6"
+version = "y2BgmG9u"
