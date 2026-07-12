@@ -1,6 +1,6 @@
 name = "ServerPlusPlus"
 filename = "server_plus_plus-neoforge-1.21.1-0.0.1+build.8.jar"
-side = "server"
+side = "both"
 
 [download]
 url = "https://cdn.modrinth.com/data/LDvlgsZf/versions/zxnMGfzP/server_plus_plus-neoforge-1.21.1-0.0.1%2Bbuild.8.jar"

@@ -297,7 +297,7 @@ metafile = true
 
 [[files]]
 file = "mods/lithostitched.pw.toml"
-hash = "f0c66fc8c3d9dbea2704b007e79125377d50484ff3a40c280b48707659209045"
+hash = "e06a9a886181277591baeb9e82b484bd6204fe3aec0ffc8781bb05bb11b4d1a9"
 metafile = true
 
 [[files]]
@@ -382,7 +382,7 @@ metafile = true
 
 [[files]]
 file = "mods/server-plus-plus.pw.toml"
-hash = "820c2709144062f6f049d39ada0380365b77928ef035260f30cff8ba659017b9"
+hash = "aab08ea92f152633611bc0f65df16fda0b521b2b4ecab506b2afe94d10dda1dd"
 metafile = true
 
 [[files]]
@@ -442,7 +442,7 @@ metafile = true
 
 [[files]]
 file = "mods/worldedit.pw.toml"
-hash = "08d4775f8546564ad812b09062633ffc48f44b76328efe3832c021651af86b14"
+hash = "de999f6cc4c2f344e324b4f331fa9767844c31463c6e8066fcd67b613338ab8c"
 metafile = true
 
 [[files]]
