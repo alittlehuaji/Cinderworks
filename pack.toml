@@ -1,4 +1,4 @@
-nam: = "HapppyMC Ember Client Mod Pack"
+name = "HapppyMC Ember Client Mod Pack"
 author = "alittlehuaji"
 version = "0.2.0"
 pack-format = "packwiz:1.1.0"
