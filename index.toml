@@ -54,6 +54,16 @@ hash = "7b87ea6e0623ada323e65fa0420e0827f6e88689898a0454376e460ad8cbc5dc"
 metafile = true
 
 [[files]]
+file = "mods/boat-item-view.pw.toml"
+hash = "ba58df8c82fc920a316a3ad2f8d52e985e34cd09713487ccbb5ea778b6168c2d"
+metafile = true
+
+[[files]]
+file = "mods/bobby-reneoforged.pw.toml"
+hash = "be92440f9df0b43195a182f7073765220c43a3425d807784e2cde3a957ae1950"
+metafile = true
+
+[[files]]
 file = "mods/bocchud.pw.toml"
 hash = "60fdfdb796c24a047c7283042fb51d0c3937a4ba745c2353cf9a5f73ed24eca5"
 metafile = true
@@ -66,6 +76,11 @@ metafile = true
 [[files]]
 file = "mods/cloth-config.pw.toml"
 hash = "75181b55e0407d1fca1e2f346c6501f919f5109545990ddfb66db9cd1b771f8a"
+metafile = true
+
+[[files]]
+file = "mods/colorwheel.pw.toml"
+hash = "3f99808dda6b83374cea1d478e2688c69af71a7381b176d0a7df50d219e44ca9"
 metafile = true
 
 [[files]]
@@ -149,6 +164,11 @@ hash = "350357b34feae2f0971d114ba856e4915e508efec110eea5ebdeac419d515e08"
 metafile = true
 
 [[files]]
+file = "mods/createbetterfps.pw.toml"
+hash = "28e720db43464fe32b9ce591fb02b824ebf691c578fb694f87a98421d3207022"
+metafile = true
+
+[[files]]
 file = "mods/creativecore.pw.toml"
 hash = "d1dd0981cbd7ae9601c9c4603f88826b68a0c7e76fc12ef6bc80f08188d7dfb8"
 metafile = true
@@ -186,6 +206,11 @@ metafile = true
 [[files]]
 file = "mods/e4mc.pw.toml"
 hash = "e1e8a78328d41538ae90f1302537faf5142ed414370fb804ff821d1d1ae34315"
+metafile = true
+
+[[files]]
+file = "mods/easy-villagers.pw.toml"
+hash = "d629988991e4e0c461a5031b8c774c184ef409f5b57187211c3abe5b1a21fc3c"
 metafile = true
 
 [[files]]
@@ -411,6 +436,11 @@ metafile = true
 [[files]]
 file = "mods/naturalist.pw.toml"
 hash = "bcd24eb0db2625488682ca538416a87a301543e5b68bff6633677a6780422db5"
+metafile = true
+
+[[files]]
+file = "mods/nbt-autocomplete.pw.toml"
+hash = "a87252ea5cefb7f1db42eaf2dd523e057fa6e690c213d803aa151c808bba2a9a"
 metafile = true
 
 [[files]]
