@@ -109,6 +109,11 @@ hash = "ff6a3d4bed914978aada4a059a16100cd2fd69a3cf19987c0d80160a7125e78b"
 metafile = true
 
 [[files]]
+file = "mods/create-fast-schematic-cannon.pw.toml"
+hash = "4ae12eddd34252c6e344dd3fcc91d3d701b5cd56cdd2cea7f16fd341527cfb2e"
+metafile = true
+
+[[files]]
 file = "mods/create-new-age.pw.toml"
 hash = "39499039e11a6e0f50542d80af94c172342fdb686f3a59d5ee4457d978a54e75"
 metafile = true
@@ -141,6 +146,11 @@ metafile = true
 [[files]]
 file = "mods/createbetterfps.pw.toml"
 hash = "28e720db43464fe32b9ce591fb02b824ebf691c578fb694f87a98421d3207022"
+metafile = true
+
+[[files]]
+file = "mods/createschematicchecker.pw.toml"
+hash = "5c39f1f605d68c64faf427aebef3abc0c2dd8b5c23d0403e5a7ee2bd7b4e9b19"
 metafile = true
 
 [[files]]
