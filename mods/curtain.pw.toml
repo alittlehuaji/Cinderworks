@@ -1,0 +1,13 @@
+name = "Curtain"
+filename = "curtain-mc1.21-1.3.2+build.314.jar"
+side = "server"
+
+[download]
+url = "https://cdn.modrinth.com/data/2Vw36Ezz/versions/EOje1kyG/curtain-mc1.21-1.3.2%2Bbuild.314.jar"
+hash-format = "sha512"
+hash = "45f346925f7c297dd1e4fed0477c344431478cc4d4a057dec2de8a07b3dec3022554b0907cc138dd6aaa5fe4f9836b34f13c4eb5144f789538b9b387b28e4cd6"
+
+[update]
+[update.modrinth]
+mod-id = "2Vw36Ezz"
+version = "EOje1kyG"

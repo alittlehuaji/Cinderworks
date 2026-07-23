@@ -184,6 +184,11 @@ hash = "36debf7653e95a855b4fedacc19027cf2e01960fc0b6d55ef2ffbffbcb455690"
 metafile = true
 
 [[files]]
+file = "mods/curtain.pw.toml"
+hash = "edf7bce3a80f3441990aa822ee32fc8bec7b8545fa4fa0729b4515fb97e79e43"
+metafile = true
+
+[[files]]
 file = "mods/custom-window-title.pw.toml"
 hash = "09d3121e0f62df0f7543ec669a7d2465ccc257f8ece46eaa37c0d8597ec36c15"
 metafile = true
@@ -479,18 +484,8 @@ hash = "531b2f540d9ce2d189278b96d6f2a04013640c12df386e27ad1c3558e9e40c78"
 metafile = true
 
 [[files]]
-file = "mods/rolling-gate.pw.toml"
-hash = "e9844b4f7b285729e2fdf4be938d3fe66d52225eddafd3581d741a3bfa337575"
-metafile = true
-
-[[files]]
 file = "mods/ryoamiclights.pw.toml"
 hash = "907a7f3584909169937bdb0891304108f6a5291ae1fdce211b62e2e8c3e14e68"
-metafile = true
-
-[[files]]
-file = "mods/server-plus-plus.pw.toml"
-hash = "aab08ea92f152633611bc0f65df16fda0b521b2b4ecab506b2afe94d10dda1dd"
 metafile = true
 
 [[files]]
