@@ -1,4 +1,4 @@
-# HappyMC Ember: Cinderworks
+# HappyMC Cinderworks
 
 > **余烬工坊**
 
@@ -6,9 +6,7 @@
 
 火焰退去之后，余烬仍在暗处发红。这里没有等待被发现的繁荣：从第一根传动轴、第一台压块机开始，让齿轮、锅炉与铁路重新转动起来
 
-**HappyMC Ember: Cinderworks** 是一个以 [Create](https://modrinth.com/mod/create) 为核心的 Minecraft 整合包。它围绕机械动力、工业生产与自动化展开，并保留适合长期生存和多人协作的探索、建造与生活内容
-
-`HappyMC Ember` 是该项目的系列名称，本义是“余烬、余火、火星”——火焰将熄未熄之后，仍在暗处微红、微热的炭火
+**HappyMC Cinderworks** 是一个以 [Create](https://modrinth.com/mod/create) 为核心的 Minecraft 整合包。它围绕机械动力、工业生产与自动化展开，并保留适合长期生存和多人协作的探索、建造与生活内容
 
 `Cinderworks` 由 *cinder*（余烬、炭屑）与 *works*（工坊、工业设施）组成：在余火未尽的世界里建起一座会呼吸的机械工坊
 
@@ -49,7 +47,7 @@
 packwiz refresh
 
 # 导出供启动器导入的 Modrinth 整合包
-packwiz modrinth export -o "HappyMC-Ember-Cinderworks.mrpack"
+packwiz modrinth export -o "HappyMC-Cinderworks.mrpack"
 ```
 
 模组的元数据保存在 `mods/*.pw.toml`，而 `pack.toml` 和 `index.toml` 是整合包的版本与索引来源。请通过 Packwiz 添加、更新或移除模组，避免直接手改索引

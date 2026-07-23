@@ -1,4 +1,4 @@
-name = "HapppyMC Ember Client Mod Pack"
+name = "HapppyMC Cinderworks Mod Pack"
 author = "alittlehuaji"
 version = "0.2.0"
 pack-format = "packwiz:1.1.0"
@@ -6,7 +6,7 @@ pack-format = "packwiz:1.1.0"
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "f53cef174063c24bb6e6ea7c49e4edee4b267e5776ebfe0017160239b6e85379"
+hash = "b8f68e283272b2f809f96193032bfe56a74a9920aea7d02c6d06c09a3e4cb591"
 
 [versions]
 minecraft = "1.21.1"

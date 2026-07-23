@@ -364,11 +364,6 @@ hash = "44d558e0b8fd72511318dc3578e7134cce95b6c3791d9f2535119d4dec04a4c5"
 metafile = true
 
 [[files]]
-file = "mods/lets-do-emi-compat.pw.toml"
-hash = "d4ce41dd8d149e8a53317e26532bf542d82d33c6728d2e259b6155b5dc7f7aa7"
-metafile = true
-
-[[files]]
 file = "mods/lets-do-farm-charm.pw.toml"
 hash = "139243c0b47a2d89147289b8d9ef91178c1c2511f3060e00e3699d0e3adb226b"
 metafile = true
