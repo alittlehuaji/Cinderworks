@@ -374,6 +374,11 @@ hash = "6fc64d152cc682c09bf8092d55b7f5341a4fab9dbd1c17a6246ec2405965cb4f"
 metafile = true
 
 [[files]]
+file = "mods/mekanism.pw.toml"
+hash = "42061fd570a0b7a8063c0860056c6391593190caa0f12d3b49105e52a56817fe"
+metafile = true
+
+[[files]]
 file = "mods/merequester.pw.toml"
 hash = "8f638da7fdf14f7c9cdc0687f7cae53e020736ab8a3b92e9c3fe123a212e1550"
 metafile = true
