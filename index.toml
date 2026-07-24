@@ -6,7 +6,12 @@ hash = "63680b71df5e56ed9cbc101986f8761ecf3e3dc99892c6e86241874068fb7ec5"
 
 [[files]]
 file = "README.md"
-hash = "14f295105f44c3a7630c53cc458a705b52ae5a8d10ae9b1836405c834977ca5b"
+hash = "1d250adbc3365797d1380343be4dbd93d3ce7316c1b15a4ad2402c867f7fe312"
+
+[[files]]
+file = "mods/advancedae.pw.toml"
+hash = "281593eae2857d26522a0084f7441ce8367cea75b23832d4ddbd435fa2cb02f2"
+metafile = true
 
 [[files]]
 file = "mods/advancements-reloaded.pw.toml"
@@ -401,11 +406,6 @@ metafile = true
 [[files]]
 file = "mods/mekanism.pw.toml"
 hash = "42061fd570a0b7a8063c0860056c6391593190caa0f12d3b49105e52a56817fe"
-metafile = true
-
-[[files]]
-file = "mods/merequester.pw.toml"
-hash = "8f638da7fdf14f7c9cdc0687f7cae53e020736ab8a3b92e9c3fe123a212e1550"
 metafile = true
 
 [[files]]
