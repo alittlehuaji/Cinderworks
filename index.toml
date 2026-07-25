@@ -6,7 +6,7 @@ hash = "5d345c0ddbd919233350094f3d60fd7a35ae8e77d4001930a10bfc1f7730d49e"
 
 [[files]]
 file = ".github/workflows/release.yml"
-hash = "1fb0f7ede4d9fd2c0f0926edd993216ad6bce2c1a053a080c7548b1a02a5197a"
+hash = "8070e9c179fbfd6f0b91c33d9afad8bbd202be098e8766e91ea88b3549a61d82"
 
 [[files]]
 file = "LICENSE"
@@ -15,6 +15,10 @@ hash = "63680b71df5e56ed9cbc101986f8761ecf3e3dc99892c6e86241874068fb7ec5"
 [[files]]
 file = "README.md"
 hash = "1d250adbc3365797d1380343be4dbd93d3ce7316c1b15a4ad2402c867f7fe312"
+
+[[files]]
+file = "build.sh"
+hash = "644bfb5ea64bd116fc5350c971bbc47e9f7ccd26177410b3180d4897e767da36"
 
 [[files]]
 file = "mods/advancedae.pw.toml"

@@ -105,14 +105,7 @@ jobs:
           ARTIFACT_PATH: ${{ steps.metadata.outputs.artifact_path }}
         run: |
           set -euo pipefail
-          mkdir -p build
-          packwiz refresh
-          if ! git diff --exit-code -- pack.toml index.toml; then
-            echo "Packwiz 索引已过期，请在本地执行 packwiz refresh 并提交变更" >&2
-            exit 1
-          fi
-          packwiz modrinth export --output "$ARTIFACT_PATH"
-          test -s "$ARTIFACT_PATH"
+          bash build.sh "$ARTIFACT_PATH"
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v7
