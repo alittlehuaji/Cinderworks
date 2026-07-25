@@ -1,0 +1,150 @@
+name: Bug 反馈
+description: 报告崩溃、兼容性、性能或其他异常问题
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你帮助改进 Cinderworks
+
+        提交前请确认问题能够在未自行增删模组的最新整合包中复现，并搜索现有 Issue，避免重复报告
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前检查
+      options:
+        - label: 我使用的是最新发布版本
+          required: true
+        - label: 我已搜索现有 Issue，未发现相同问题
+          required: true
+        - label: 我已在未自行增删模组的实例中复现此问题
+          required: true
+
+  - type: input
+    id: pack-version
+    attributes:
+      label: 整合包版本
+      description: 可在启动器实例信息或发布页面中查看
+      placeholder: 例如 0.2.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: side
+    attributes:
+      label: 问题发生端
+      options:
+        - 客户端
+        - 服务端
+        - 客户端和服务端
+        - 不确定
+    validations:
+      required: true
+
+  - type: input
+    id: operating-system
+    attributes:
+      label: 操作系统
+      placeholder: 例如 Windows 11 24H2、Ubuntu 24.04 或 macOS 15
+    validations:
+      required: true
+
+  - type: input
+    id: launcher
+    attributes:
+      label: 启动器及版本
+      placeholder: 例如 Prism Launcher 11.0.2
+    validations:
+      required: true
+
+  - type: input
+    id: java-version
+    attributes:
+      label: Java 版本
+      description: 本整合包需要 Java 21
+      placeholder: 例如 Temurin 21.0.7
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 请说明问题发生的场景、频率和造成的影响
+      placeholder: 清晰、完整地描述问题
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 请按顺序列出能够稳定触发问题的操作
+      placeholder: |
+        1. 创建或进入……
+        2. 放置或操作……
+        3. ……
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期结果
+      placeholder: 正常情况下应该发生什么
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+      placeholder: 实际发生了什么，包括错误提示或异常表现
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志或崩溃报告
+      description: 请将完整的 latest.log 或 crash-reports 中对应的报告拖入此处，也可提供可信日志托管服务的链接，请勿只粘贴少量 ERROR 行，并注意移除敏感信息
+      placeholder: 将文件拖入此处或粘贴链接
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: modifications
+    attributes:
+      label: 实例修改情况
+      description: 可多选；若均不符合则无需选择
+      options:
+        - label: 添加、删除或更新过模组
+        - label: 修改过模组配置
+        - label: 使用了额外的资源包或光影
+        - label: 修改过 JVM 参数
+
+  - type: textarea
+    id: modification-details
+    attributes:
+      label: 修改详情
+      description: 如果修改过实例，请列出具体内容；未修改可填写“无”
+      placeholder: 无
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted-solutions
+    attributes:
+      label: 已尝试的解决方法
+      description: 例如重新安装整合包、创建新世界或停用额外资源包
+      placeholder: 可选
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 补充信息
+      description: 可添加截图、录屏、存档、最后一个正常版本或其他有助于定位问题的信息
+      placeholder: 可选
