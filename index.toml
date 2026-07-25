@@ -444,6 +444,11 @@ hash = "8f35cebc29e664e9a3d840f6ce716e266470813c72b8ad2f2b64521e49739e2e"
 metafile = true
 
 [[files]]
+file = "mods/neovelocity.pw.toml"
+hash = "701c3f61feb03b71471f951249996e61f1c75e7951825e61f039030bd05771b8"
+metafile = true
+
+[[files]]
 file = "mods/not-enough-animations.pw.toml"
 hash = "e92633222b9275744ba9ae7a90781494f67933924b56ea8287c5dc7553e77e17"
 metafile = true
