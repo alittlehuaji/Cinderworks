@@ -1,6 +1,14 @@
 hash-format = "sha256"
 
 [[files]]
+file = ".github/ISSUE_TEMPLATE/bug-report.yml"
+hash = "5d345c0ddbd919233350094f3d60fd7a35ae8e77d4001930a10bfc1f7730d49e"
+
+[[files]]
+file = ".github/workflows/release.yml"
+hash = "1fb0f7ede4d9fd2c0f0926edd993216ad6bce2c1a053a080c7548b1a02a5197a"
+
+[[files]]
 file = "LICENSE"
 hash = "63680b71df5e56ed9cbc101986f8761ecf3e3dc99892c6e86241874068fb7ec5"
 
