@@ -1,0 +1,165 @@
+name: 构建与发布整合包
+
+on:
+  push:
+    tags:
+      - "[0-9]*.[0-9]*.[0-9]*"
+      - "v[0-9]*.[0-9]*.[0-9]*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: modpack-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: 构建整合包
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      artifact_name: ${{ steps.metadata.outputs.artifact_name }}
+      prerelease: ${{ steps.metadata.outputs.prerelease }}
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: 配置 Go
+        uses: actions/setup-go@v7
+        with:
+          go-version: "1.25"
+          cache: false
+
+      - name: 安装 Packwiz
+        env:
+          PACKWIZ_REVISION: dfd8b68a4796c763e25bad50265ea1f1233e24f1
+        run: |
+          set -euo pipefail
+          go install "github.com/packwiz/packwiz@${PACKWIZ_REVISION}"
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: 确定版本与产物名称
+        id: metadata
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          SHORT_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          pack_version="$(sed -nE 's/^version[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*$/\1/p' pack.toml)"
+          if [[ -z "$pack_version" ]]; then
+            echo "无法从 pack.toml 读取整合包版本" >&2
+            exit 1
+          fi
+
+          if [[ "$EVENT_NAME" == "push" ]]; then
+            semver_regex='^v?(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-([0-9A-Za-z-]+)(\.[0-9A-Za-z-]+)*)?(\+([0-9A-Za-z-]+)(\.[0-9A-Za-z-]+)*)?$'
+            if [[ ! "$REF_NAME" =~ $semver_regex ]]; then
+              echo "Tag '$REF_NAME' 不是有效的语义化版本" >&2
+              exit 1
+            fi
+
+            tag_version="${REF_NAME#v}"
+            release_core="${tag_version%%+*}"
+            if [[ "$release_core" == *-* ]]; then
+              prerelease="${release_core#*-}"
+              IFS='.' read -ra identifiers <<< "$prerelease"
+              for identifier in "${identifiers[@]}"; do
+                if [[ "$identifier" =~ ^[0-9]+$ && "$identifier" != "0" && "$identifier" == 0* ]]; then
+                  echo "Tag '$REF_NAME' 的预发布数字标识不能包含前导零" >&2
+                  exit 1
+                fi
+              done
+            fi
+
+            if [[ "$tag_version" != "$pack_version" ]]; then
+              echo "Tag 版本 '$tag_version' 与 pack.toml 版本 '$pack_version' 不一致" >&2
+              exit 1
+            fi
+
+            artifact_version="$tag_version"
+            if [[ "$release_core" == *-* ]]; then
+              echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            artifact_version="${pack_version}-${SHORT_SHA:0:7}"
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          artifact_name="Cinderworks-${artifact_version}"
+          echo "pack_version=$pack_version" >> "$GITHUB_OUTPUT"
+          echo "artifact_name=$artifact_name" >> "$GITHUB_OUTPUT"
+          echo "artifact_path=build/${artifact_name}.mrpack" >> "$GITHUB_OUTPUT"
+
+      - name: 构建 Modrinth 整合包
+        env:
+          ARTIFACT_PATH: ${{ steps.metadata.outputs.artifact_path }}
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          packwiz refresh
+          if ! git diff --exit-code -- pack.toml index.toml; then
+            echo "Packwiz 索引已过期，请在本地执行 packwiz refresh 并提交变更" >&2
+            exit 1
+          fi
+          packwiz modrinth export --output "$ARTIFACT_PATH"
+          test -s "$ARTIFACT_PATH"
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.metadata.outputs.artifact_name }}
+          path: ${{ steps.metadata.outputs.artifact_path }}
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+  release:
+    name: 创建 GitHub Release
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 下载构建产物
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build.outputs.artifact_name }}
+          path: dist
+
+      - name: 创建 GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG_NAME: ${{ github.ref_name }}
+          IS_PRERELEASE: ${{ needs.build.outputs.prerelease }}
+        run: |
+          set -euo pipefail
+
+          artifact_path="dist/${{ needs.build.outputs.artifact_name }}.mrpack"
+          test -s "$artifact_path"
+
+          args=(
+            "$TAG_NAME"
+            "$artifact_path"
+            --verify-tag
+            --generate-notes
+            --title "$TAG_NAME"
+          )
+
+          if [[ "$IS_PRERELEASE" == "true" ]]; then
+            args+=(--prerelease)
+          fi
+
+          gh release create "${args[@]}"
