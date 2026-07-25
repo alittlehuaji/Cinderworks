@@ -18,7 +18,7 @@ hash = "1d250adbc3365797d1380343be4dbd93d3ce7316c1b15a4ad2402c867f7fe312"
 
 [[files]]
 file = "build.sh"
-hash = "644bfb5ea64bd116fc5350c971bbc47e9f7ccd26177410b3180d4897e767da36"
+hash = "4800838223e6a1a452908578e9829245901173389efe1c43ecb556a325f5eef5"
 
 [[files]]
 file = "mods/advancedae.pw.toml"

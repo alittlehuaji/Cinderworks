@@ -2,99 +2,133 @@
 
 set -Eeuo pipefail
 
-readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
-
-if (( $# != 1 )); then
-  echo "用法: $0 <输出文件.mrpack>" >&2
-  exit 2
-fi
-
-readonly OUTPUT_PATH="$1"
+# 可维护配置
+readonly PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly TRANSLATE_PACK_API="https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest"
+readonly TRANSLATE_PACK_PATTERN='^Cinderworks_TranslatePack-.*\.zip$'
+readonly RESOURCE_PACK_DIR="client-overrides/resourcepacks"
 
-if [[ "$OUTPUT_PATH" == /* ]]; then
-  readonly OUTPUT_ARCHIVE="$OUTPUT_PATH"
-else
-  readonly OUTPUT_ARCHIVE="$SCRIPT_DIR/$OUTPUT_PATH"
-fi
+OUTPUT_PATH=""
+OUTPUT_ARCHIVE=""
+TEMP_DIR=""
+TRANSLATE_PACK_NAME=""
+TRANSLATE_PACK_FILE=""
 
-if [[ "$OUTPUT_PATH" != *.mrpack ]]; then
-  echo "输出文件必须使用 .mrpack 扩展名: $OUTPUT_PATH" >&2
-  exit 2
-fi
+die() {
+  echo "错误: $*" >&2
+  exit 1
+}
 
-for required_file in pack.toml index.toml; do
-  if [[ ! -f "$required_file" ]]; then
-    echo "缺少必要文件: $required_file" >&2
-    exit 1
+check_requirements() {
+  local item
+
+  for item in pack.toml index.toml; do
+    [[ -f "$item" ]] || die "缺少必要文件: $item"
+  done
+
+  for item in packwiz curl jq unzip zip sha256sum cmp; do
+    command -v "$item" >/dev/null 2>&1 || die "未找到必要命令: $item"
+  done
+}
+
+prepare_output() {
+  (( $# == 1 )) || die "用法: $0 <输出文件.mrpack>"
+
+  OUTPUT_PATH="$1"
+  [[ "$OUTPUT_PATH" == *.mrpack ]] || die "输出文件必须使用 .mrpack 扩展名: $OUTPUT_PATH"
+
+  if [[ "$OUTPUT_PATH" == /* ]]; then
+    OUTPUT_ARCHIVE="$OUTPUT_PATH"
+  else
+    OUTPUT_ARCHIVE="$PROJECT_DIR/$OUTPUT_PATH"
   fi
-done
 
-for required_command in packwiz curl unzip zip sha256sum; do
-  if ! command -v "$required_command" >/dev/null 2>&1; then
-    echo "未找到必要命令: $required_command" >&2
-    exit 1
+  mkdir -p "$(dirname -- "$OUTPUT_ARCHIVE")"
+  rm -f -- "$OUTPUT_ARCHIVE"
+}
+
+refresh_index() {
+  cp pack.toml "$TEMP_DIR/pack.toml"
+  cp index.toml "$TEMP_DIR/index.toml"
+
+  packwiz refresh
+
+  if ! cmp --silent pack.toml "$TEMP_DIR/pack.toml" ||
+    ! cmp --silent index.toml "$TEMP_DIR/index.toml"; then
+    die "Packwiz 索引已过期，请提交 packwiz refresh 产生的变更后重试"
   fi
-done
+}
 
-mkdir -p "$(dirname -- "$OUTPUT_PATH")"
-rm -f -- "$OUTPUT_PATH"
+build_modpack() {
+  packwiz modrinth export --output "$OUTPUT_ARCHIVE"
+  [[ -s "$OUTPUT_ARCHIVE" ]] || die "未生成有效产物: $OUTPUT_PATH"
+}
 
-readonly PACK_HASH_BEFORE="$(sha256sum pack.toml | cut -d ' ' -f 1)"
-readonly INDEX_HASH_BEFORE="$(sha256sum index.toml | cut -d ' ' -f 1)"
+download_translate_pack() {
+  local release_data="$TEMP_DIR/translate-pack-release.json"
+  local asset_info
+  local download_url
+  local expected_digest
 
-packwiz refresh
+  curl --fail --location --retry 3 --silent --show-error \
+    --header "Accept: application/vnd.github+json" \
+    --header "X-GitHub-Api-Version: 2022-11-28" \
+    --output "$release_data" \
+    "$TRANSLATE_PACK_API"
 
-readonly PACK_HASH_AFTER="$(sha256sum pack.toml | cut -d ' ' -f 1)"
-readonly INDEX_HASH_AFTER="$(sha256sum index.toml | cut -d ' ' -f 1)"
+  asset_info="$(jq --raw-output --exit-status \
+    --arg pattern "$TRANSLATE_PACK_PATTERN" \
+    'first(.assets[] | select(.name | test($pattern))) | [.name, .browser_download_url, .digest] | @tsv' \
+    "$release_data")" || die "最新正式 Release 中没有可用的汉化资源包"
 
-if [[ "$PACK_HASH_BEFORE" != "$PACK_HASH_AFTER" || "$INDEX_HASH_BEFORE" != "$INDEX_HASH_AFTER" ]]; then
-  echo "Packwiz 索引已过期，请提交 packwiz refresh 产生的变更后重试" >&2
-  exit 1
-fi
+  IFS=$'\t' read -r TRANSLATE_PACK_NAME download_url expected_digest <<< "$asset_info"
+  [[ "$expected_digest" == sha256:* ]] || die "汉化资源包没有有效的 SHA-256 摘要"
+  expected_digest="${expected_digest#sha256:}"
 
-packwiz modrinth export --output "$OUTPUT_PATH"
+  TRANSLATE_PACK_FILE="$TEMP_DIR/$TRANSLATE_PACK_NAME"
+  curl --fail --location --retry 3 --silent --show-error \
+    --output "$TRANSLATE_PACK_FILE" \
+    "$download_url"
 
-if [[ ! -s "$OUTPUT_PATH" ]]; then
-  echo "构建失败，未生成有效产物: $OUTPUT_PATH" >&2
-  exit 1
-fi
+  echo "$expected_digest  $TRANSLATE_PACK_FILE" | sha256sum --check --status ||
+    die "汉化资源包 SHA-256 校验失败"
+  unzip -tq "$TRANSLATE_PACK_FILE" >/dev/null || die "汉化资源包不是有效的 ZIP 文件"
+}
 
-readonly TEMP_DIR="$(mktemp -d)"
-trap 'rm -rf -- "$TEMP_DIR"' EXIT
+add_translate_pack() {
+  local embed_dir="$TEMP_DIR/embed"
 
-readonly RELEASE_DATA="$TEMP_DIR/translate-pack-release.json"
-curl --fail --location --retry 3 --silent --show-error \
-  --header "Accept: application/vnd.github+json" \
-  --header "X-GitHub-Api-Version: 2022-11-28" \
-  --output "$RELEASE_DATA" \
-  "$TRANSLATE_PACK_API"
+  mkdir -p "$embed_dir/$RESOURCE_PACK_DIR"
+  cp "$TRANSLATE_PACK_FILE" "$embed_dir/$RESOURCE_PACK_DIR/$TRANSLATE_PACK_NAME"
 
-readonly TRANSLATE_PACK_NAME="$(grep -oE '"name"[[:space:]]*:[[:space:]]*"Cinderworks_TranslatePack-[^"]+\.zip"' "$RELEASE_DATA" | head -n 1 | cut -d '"' -f 4)"
-readonly TRANSLATE_PACK_URL="$(grep -oE '"browser_download_url"[[:space:]]*:[[:space:]]*"[^"]+/Cinderworks_TranslatePack-[^"]+\.zip"' "$RELEASE_DATA" | head -n 1 | cut -d '"' -f 4)"
-readonly TRANSLATE_PACK_DIGEST="$(grep -oE '"digest"[[:space:]]*:[[:space:]]*"sha256:[0-9a-fA-F]{64}"' "$RELEASE_DATA" | head -n 1 | cut -d ':' -f 3 | tr -d '"')"
+  (
+    cd "$embed_dir"
+    zip -q "$OUTPUT_ARCHIVE" "$RESOURCE_PACK_DIR/$TRANSLATE_PACK_NAME"
+  )
+}
 
-if [[ -z "$TRANSLATE_PACK_NAME" || -z "$TRANSLATE_PACK_URL" || -z "$TRANSLATE_PACK_DIGEST" ]]; then
-  echo "无法读取汉化资源包附件的名称、下载地址或 SHA-256" >&2
-  exit 1
-fi
+main() {
+  cd "$PROJECT_DIR"
+  prepare_output "$@"
+  check_requirements
 
-readonly TRANSLATE_PACK_FILE="$TEMP_DIR/$TRANSLATE_PACK_NAME"
-curl --fail --location --retry 3 --silent --show-error \
-  --output "$TRANSLATE_PACK_FILE" \
-  "$TRANSLATE_PACK_URL"
+  TEMP_DIR="$(mktemp -d)"
+  trap 'rm -rf -- "$TEMP_DIR"' EXIT
 
-echo "$TRANSLATE_PACK_DIGEST  $TRANSLATE_PACK_FILE" | sha256sum --check --status
-unzip -tq "$TRANSLATE_PACK_FILE" >/dev/null
+  echo "[1/4] 检查 Packwiz 索引"
+  refresh_index
 
-mkdir -p "$TEMP_DIR/client-overrides/resourcepacks"
-cp -- "$TRANSLATE_PACK_FILE" "$TEMP_DIR/client-overrides/resourcepacks/$TRANSLATE_PACK_NAME"
-(
-  cd "$TEMP_DIR"
-  zip -q "$OUTPUT_ARCHIVE" "client-overrides/resourcepacks/$TRANSLATE_PACK_NAME"
-)
+  echo "[2/4] 导出 Modrinth 整合包"
+  build_modpack
 
-echo "已加入资源包: $TRANSLATE_PACK_NAME"
+  echo "[3/4] 下载并校验汉化资源包"
+  download_translate_pack
 
-echo "构建完成: $OUTPUT_PATH"
+  echo "[4/4] 将汉化资源包加入整合包"
+  add_translate_pack
+
+  echo "已加入资源包: $TRANSLATE_PACK_NAME"
+  echo "构建完成: $OUTPUT_PATH"
+}
+
+main "$@"
