@@ -91,7 +91,7 @@ jobs:
               echo "prerelease=false" >> "$GITHUB_OUTPUT"
             fi
           else
-            artifact_version="${pack_version}-${SHORT_SHA:0:7}"
+            artifact_version="${pack_version}-dev.${SHORT_SHA:0:7}"
             echo "prerelease=false" >> "$GITHUB_OUTPUT"
           fi
 
