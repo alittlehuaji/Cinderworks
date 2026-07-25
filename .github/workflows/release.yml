@@ -1,4 +1,4 @@
-name: 构建与发布整合包
+name: Release
 
 on:
   push:
