@@ -441,11 +441,6 @@ hash = "8f35cebc29e664e9a3d840f6ce716e266470813c72b8ad2f2b64521e49739e2e"
 metafile = true
 
 [[files]]
-file = "mods/neovelocity.pw.toml"
-hash = "701c3f61feb03b71471f951249996e61f1c75e7951825e61f039030bd05771b8"
-metafile = true
-
-[[files]]
 file = "mods/not-enough-animations.pw.toml"
 hash = "e92633222b9275744ba9ae7a90781494f67933924b56ea8287c5dc7553e77e17"
 metafile = true
@@ -458,6 +453,11 @@ metafile = true
 [[files]]
 file = "mods/open-parties-and-claims.pw.toml"
 hash = "2dc5bf4118f932f3d328b163e1b97972964ac33e82c4eb89f2f122ef0661de7e"
+metafile = true
+
+[[files]]
+file = "mods/proxy-compatible-forge.pw.toml"
+hash = "c80a96963f867c8c01c8e72df13abc9e97bc9ae99575b94fd95605875c60b88b"
 metafile = true
 
 [[files]]
