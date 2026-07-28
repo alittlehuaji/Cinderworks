@@ -296,11 +296,6 @@ hash = "94af73eec28b59b314b2c6ef9dfb98f37d7bbcbcb482c278570cc15e44b6a559"
 metafile = true
 
 [[files]]
-file = "mods/in-game-account-switcher.pw.toml"
-hash = "4938f545cff37075d06316f0a92295c98b99decda67854696da63ea8e4f68cd4"
-metafile = true
-
-[[files]]
 file = "mods/interiors.pw.toml"
 hash = "e7e6b3effe3022cf1fdb900c857111fdcbfd6b385c2d5bd28c914efaed436ecb"
 metafile = true
@@ -558,11 +553,6 @@ metafile = true
 [[files]]
 file = "mods/worldedit.pw.toml"
 hash = "de999f6cc4c2f344e324b4f331fa9767844c31463c6e8066fcd67b613338ab8c"
-metafile = true
-
-[[files]]
-file = "mods/x+-autofish.pw.toml"
-hash = "29d142218e15fbd26a4e17e1a65dab7a5a0dd81e6806130a474c1d27fa1be53d"
 metafile = true
 
 [[files]]
