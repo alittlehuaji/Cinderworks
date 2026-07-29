@@ -1,26 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = ".github/ISSUE_TEMPLATE/bug-report.yml"
-hash = "5d345c0ddbd919233350094f3d60fd7a35ae8e77d4001930a10bfc1f7730d49e"
-
-[[files]]
-file = ".github/workflows/release.yml"
-hash = "8070e9c179fbfd6f0b91c33d9afad8bbd202be098e8766e91ea88b3549a61d82"
-
-[[files]]
-file = "LICENSE"
-hash = "63680b71df5e56ed9cbc101986f8761ecf3e3dc99892c6e86241874068fb7ec5"
-
-[[files]]
-file = "README.md"
-hash = "1d250adbc3365797d1380343be4dbd93d3ce7316c1b15a4ad2402c867f7fe312"
-
-[[files]]
-file = "build.sh"
-hash = "4800838223e6a1a452908578e9829245901173389efe1c43ecb556a325f5eef5"
-
-[[files]]
 file = "mods/advancedae.pw.toml"
 hash = "281593eae2857d26522a0084f7441ce8367cea75b23832d4ddbd435fa2cb02f2"
 metafile = true

@@ -1,3 +1,9 @@
 tmp
-
 *.txt
+.github/
+.git/
+.gitignore
+.gitattributes
+LICENSE
+README.md
+build.sh
