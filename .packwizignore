@@ -7,3 +7,5 @@ tmp
 LICENSE
 README.md
 build.sh
+client-overrides/
+server-overrides/
