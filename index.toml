@@ -547,7 +547,7 @@ metafile = true
 
 [[files]]
 file = "mods/world-play-time.pw.toml"
-hash = "8384209fea49f42c860403e9faa6ad4df5b23957780880519fc59ca3232f324f"
+hash = "3b1c810bd295a75683fcfc3b40933200e0d519bf932165de4ddb674a38c36afe"
 metafile = true
 
 [[files]]

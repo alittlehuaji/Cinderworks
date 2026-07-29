@@ -1,6 +1,6 @@
 name = "World Play Time"
 filename = "worldplaytime-1.2.2-1.21-NEOFORGE.jar"
-side = "both"
+side = "client"
 
 [download]
 hash-format = "sha1"
