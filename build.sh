@@ -6,6 +6,13 @@ set -Eeuo pipefail
 readonly PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly RESOURCE_PACK_DIR="client-overrides/resourcepacks"
 
+# 由 build.sh 手动注入整合包的 overrides 目录
+# 预留 server-overrides：目录存在时自动打包，不存在时跳过
+declare -ra OVERRIDE_DIRS=(
+  "client-overrides"
+  "server-overrides"
+)
+
 # 资源包列表：每行一个，格式为 "名称|GitHub Releases API 地址|资源包文件名正则"
 # 新增资源包只需在此追加一行即可，无需改动其它逻辑
 declare -ra RESOURCE_PACKS=(
@@ -118,21 +125,36 @@ download_all_packs() {
   done
 }
 
-# 将嵌入目录中所有已下载的资源包一次性写入整合包
-embed_packs() {
+# 将仓库的 overrides 目录与已下载的资源包写入整合包
+# 仓库内 client-overrides/、server-overrides/ 以顶层路径写入（Modrinth 格式期望位置）
+# 下载的资源包位于临时嵌入目录的 client-overrides/resourcepacks/ 下，同样以顶层路径写入
+embed_overrides() {
   local embed_dir="$TEMP_DIR/embed"
-  [[ -d "$embed_dir" && ${#EMBEDDED_PACK_NAMES[@]} -gt 0 ]] || return 0
+  local dir
 
-  local archive_args=()
-  local asset_name
-  for asset_name in "${EMBEDDED_PACK_NAMES[@]}"; do
-    archive_args+=("$RESOURCE_PACK_DIR/$asset_name")
+  # 仓库内已存在的 overrides 目录：在仓库根目录直接递归打包，保证顶层路径正确
+  local has_repo_overrides=0
+  for dir in "${OVERRIDE_DIRS[@]}"; do
+    if [[ -d "$PROJECT_DIR/$dir" ]]; then
+      zip -q -r "$OUTPUT_ARCHIVE" "$dir"
+      has_repo_overrides=1
+    fi
   done
 
-  (
-    cd "$embed_dir"
-    zip -q "$OUTPUT_ARCHIVE" "${archive_args[@]}"
-  )
+  # 脚本下载的资源包：在嵌入目录打包，路径前缀同为 client-overrides/resourcepacks/
+  if [[ -d "$embed_dir" && ${#EMBEDDED_PACK_NAMES[@]} -gt 0 ]]; then
+    local archive_args=()
+    local asset_name
+    for asset_name in "${EMBEDDED_PACK_NAMES[@]}"; do
+      archive_args+=("$RESOURCE_PACK_DIR/$asset_name")
+    done
+    (
+      cd "$embed_dir"
+      zip -q "$OUTPUT_ARCHIVE" "${archive_args[@]}"
+    )
+  fi
+
+  [[ $has_repo_overrides -eq 1 || ${#EMBEDDED_PACK_NAMES[@]} -gt 0 ]] || return 0
 }
 
 main() {
@@ -152,10 +174,10 @@ main() {
   echo "[3/4] 下载并校验资源包"
   download_all_packs
 
-  echo "[4/4] 将资源包加入整合包"
-  embed_packs
+  echo "[4/4] 注入 overrides 与资源包"
+  embed_overrides
 
-  echo "已加入资源包: ${EMBEDDED_PACK_NAMES[*]}"
+  echo "已加入资源包: ${EMBEDDED_PACK_NAMES[*]:-无}"
   echo "构建完成: $OUTPUT_PATH"
 }
 
