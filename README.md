@@ -49,7 +49,7 @@ packwiz modrinth export
 
 ## 自动化构建脚本 `build.sh`
 
-`build.sh` 用于一键导出 Modrinth 整合包（`.mrpack`），并自动从 GitHub Releases 拉取、校验并嵌入外部资源包（如汉化资源包）。相比手动执行 `packwiz modrinth export`，脚本额外完成索引一致性校验、资源包下载与 SHA-256 校验、ZIP 完整性校验，并将资源包注入整合包产物
+`build.sh` 用于一键导出 Modrinth 整合包（`.mrpack`），并自动完成两类额外工作：从 GitHub Releases 拉取、校验并嵌入外部资源包（如汉化资源包）；将仓库的 `client-overrides/` 等覆盖目录以正确的顶层路径注入整合包。相比手动执行 `packwiz modrinth export`，脚本额外完成索引一致性校验、资源包下载与 SHA-256 校验、ZIP 完整性校验，以及 overrides 目录的手动注入
 
 ### 依赖
 
@@ -94,9 +94,38 @@ packwiz modrinth export
 | `[1/4]` | 检查 Packwiz 索引 | 执行 `packwiz refresh` 并比对 `pack.toml`、`index.toml` 是否发生变化。若索引已过期（即 refresh 产生了未提交的变更），报错提示先提交变更再重试，避免导出与仓库状态不一致的产物 |
 | `[2/4]` | 导出 Modrinth 整合包 | 调用 `packwiz modrinth export` 生成基础 `.mrpack` |
 | `[3/4]` | 下载并校验资源包 | 逐个从配置的 GitHub Releases 下载资源包，校验 SHA-256 摘要与 ZIP 完整性后放入临时嵌入目录 |
-| `[4/4]` | 将资源包加入整合包 | 将所有已下载的资源包一次性 `zip` 注入 `.mrpack` 的 `client-overrides/resourcepacks/` 路径 |
+| `[4/4]` | 注入 overrides 与资源包 | 将仓库的 `client-overrides/`、`server-overrides/`（若存在）以顶层路径 `zip` 注入 `.mrpack`，随后注入已下载的资源包至 `client-overrides/resourcepacks/` |
 
 构建结束后会打印实际嵌入的资源包文件名与最终产物路径
+
+### overrides 目录处理
+
+packwiz 导出时会将仓库根目录的所有文件塞进 `.mrpack` 的 `overrides/` 路径下。但 Modrinth 整合包格式中，"仅客户端"的覆盖文件应位于顶层的 `client-overrides/`，"仅服务端"的应位于 `server-overrides/`。若交由 packwiz 处理，这些目录会被错误嵌套成 `overrides/client-overrides/...`，启动器导入后无法被识别为客户端覆盖
+
+为避免此问题，脚本采用 **packwiz 只管模组、overrides 由脚本手动注入** 的分工：
+
+1. `.packwizignore` 中排除 `client-overrides/` 与 `server-overrides/`，使 packwiz 完全不索引这两个目录
+2. packwiz 导出基础 `.mrpack` 后，脚本在仓库根目录用 `zip -r` 将这两个目录以顶层路径直接写入整合包
+
+涉及的 overrides 目录在脚本顶部的 `OVERRIDE_DIRS` 数组中声明：
+
+```bash
+declare -ra OVERRIDE_DIRS=(
+  "client-overrides"
+  "server-overrides"
+)
+```
+
+每个目录的处理规则：
+
+| 目录 | 行为 |
+| --- | --- |
+| `client-overrides` | 存在则打包，内容覆盖客户端实例（如游戏设置、客户端模组配置） |
+| `server-overrides` | 预留位，存在则打包，不存在自动跳过 |
+
+脚本下载的资源包会被放入 `client-overrides/resourcepacks/`，与仓库内已有的 `client-overrides/` 内容合并后一同注入，路径互不冲突
+
+> 注意：`client-overrides/mods/` 下的客户端专属模组由 packwiz 根据 `.pw.toml` 中的 `side = "client"` 标记自动归置，不属脚本管辖范围。脚本只接管 `config/`、`resourcepacks/` 等非模组覆盖文件
 
 ### 配置资源包
 
@@ -148,6 +177,8 @@ declare -ra RESOURCE_PACKS=(
 - 仅匹配最新正式 Release（`/releases/latest`），不含预发布
 - 资源包固定嵌入至 `client-overrides/resourcepacks/`，客户端会在游戏内自动加载
 - 要求 GitHub Release 的 asset 提供 `sha256` 摘要字段，否则报错
+- overrides 目录仅支持仓库内的 `client-overrides/` 与 `server-overrides/`，其它覆盖路径需扩展 `OVERRIDE_DIRS`
+- `.packwizignore` 必须同步排除 `OVERRIDE_DIRS` 中声明的目录，否则 packwiz 会重复索引导致路径冲突
 
 ## 致谢
 
