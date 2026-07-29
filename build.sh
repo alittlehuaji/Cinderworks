@@ -4,15 +4,20 @@ set -Eeuo pipefail
 
 # 可维护配置
 readonly PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-readonly TRANSLATE_PACK_API="https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest"
-readonly TRANSLATE_PACK_PATTERN='^Cinderworks_TranslatePack-.*\.zip$'
 readonly RESOURCE_PACK_DIR="client-overrides/resourcepacks"
+
+# 资源包列表：每行一个，格式为 "名称|GitHub Releases API 地址|资源包文件名正则"
+# 新增资源包只需在此追加一行即可，无需改动其它逻辑
+declare -ra RESOURCE_PACKS=(
+  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack-.*\.zip$"
+)
 
 OUTPUT_PATH=""
 OUTPUT_ARCHIVE=""
 TEMP_DIR=""
-TRANSLATE_PACK_NAME=""
-TRANSLATE_PACK_FILE=""
+
+# 收集本次已下载并待嵌入的资源包文件名
+declare -a EMBEDDED_PACK_NAMES=()
 
 die() {
   echo "错误: $*" >&2
@@ -64,46 +69,69 @@ build_modpack() {
   [[ -s "$OUTPUT_ARCHIVE" ]] || die "未生成有效产物: $OUTPUT_PATH"
 }
 
-download_translate_pack() {
-  local release_data="$TEMP_DIR/translate-pack-release.json"
-  local asset_info
-  local download_url
-  local expected_digest
+# 下载并校验单个资源包，成功后放入嵌入目录
+# 参数: 名称 API地址 文件名正则
+download_pack() {
+  local name="$1" api="$2" pattern="$3"
+  local release_data="$TEMP_DIR/release-${#EMBEDDED_PACK_NAMES[@]}.json"
+  local asset_info download_url expected_digest asset_name pack_file
+  local embed_dir="$TEMP_DIR/embed"
 
   curl --fail --location --retry 3 --silent --show-error \
     --header "Accept: application/vnd.github+json" \
     --header "X-GitHub-Api-Version: 2022-11-28" \
     --output "$release_data" \
-    "$TRANSLATE_PACK_API"
+    "$api"
 
   asset_info="$(jq --raw-output --exit-status \
-    --arg pattern "$TRANSLATE_PACK_PATTERN" \
+    --arg pattern "$pattern" \
     'first(.assets[] | select(.name | test($pattern))) | [.name, .browser_download_url, .digest] | @tsv' \
-    "$release_data")" || die "最新正式 Release 中没有可用的汉化资源包"
+    "$release_data")" || die "[$name] 最新正式 Release 中没有匹配的资源包"
 
-  IFS=$'\t' read -r TRANSLATE_PACK_NAME download_url expected_digest <<< "$asset_info"
-  [[ "$expected_digest" == sha256:* ]] || die "汉化资源包没有有效的 SHA-256 摘要"
+  IFS=$'\t' read -r asset_name download_url expected_digest <<< "$asset_info"
+  [[ "$expected_digest" == sha256:* ]] || die "[$name] 资源包没有有效的 SHA-256 摘要"
   expected_digest="${expected_digest#sha256:}"
 
-  TRANSLATE_PACK_FILE="$TEMP_DIR/$TRANSLATE_PACK_NAME"
+  pack_file="$TEMP_DIR/$asset_name"
   curl --fail --location --retry 3 --silent --show-error \
-    --output "$TRANSLATE_PACK_FILE" \
+    --output "$pack_file" \
     "$download_url"
 
-  echo "$expected_digest  $TRANSLATE_PACK_FILE" | sha256sum --check --status ||
-    die "汉化资源包 SHA-256 校验失败"
-  unzip -tq "$TRANSLATE_PACK_FILE" >/dev/null || die "汉化资源包不是有效的 ZIP 文件"
-}
-
-add_translate_pack() {
-  local embed_dir="$TEMP_DIR/embed"
+  echo "$expected_digest  $pack_file" | sha256sum --check --status ||
+    die "[$name] 资源包 SHA-256 校验失败"
+  unzip -tq "$pack_file" >/dev/null || die "[$name] 资源包不是有效的 ZIP 文件"
 
   mkdir -p "$embed_dir/$RESOURCE_PACK_DIR"
-  cp "$TRANSLATE_PACK_FILE" "$embed_dir/$RESOURCE_PACK_DIR/$TRANSLATE_PACK_NAME"
+  cp "$pack_file" "$embed_dir/$RESOURCE_PACK_DIR/$asset_name"
+  EMBEDDED_PACK_NAMES+=("$asset_name")
+}
+
+# 遍历配置数组，逐个下载并校验所有资源包
+download_all_packs() {
+  local entry name api pattern
+  for entry in "${RESOURCE_PACKS[@]}"; do
+    IFS='|' read -r name api pattern <<< "$entry"
+    [[ -n "$name" && -n "$api" && -n "$pattern" ]] ||
+      die "资源包配置格式错误（应为 名称|API|正则）: $entry"
+    echo "  · $name"
+    download_pack "$name" "$api" "$pattern"
+  done
+}
+
+# 将嵌入目录中所有已下载的资源包一次性写入整合包
+embed_packs() {
+  local embed_dir="$TEMP_DIR/embed"
+  [[ -d "$embed_dir" && ${#EMBEDDED_PACK_NAMES[@]} -gt 0 ]] || return 0
+
+  local archive_args=()
+  local asset_name
+  for asset_name in "${EMBEDDED_PACK_NAMES[@]}"; do
+    archive_args+=("$RESOURCE_PACK_DIR/$asset_name")
+  done
 
   (
     cd "$embed_dir"
-    zip -q "$OUTPUT_ARCHIVE" "$RESOURCE_PACK_DIR/$TRANSLATE_PACK_NAME"
+    zip -q "$OUTPUT_ARCHIVE" "${archive_args[@]}"
   )
 }
 
@@ -121,13 +149,13 @@ main() {
   echo "[2/4] 导出 Modrinth 整合包"
   build_modpack
 
-  echo "[3/4] 下载并校验汉化资源包"
-  download_translate_pack
+  echo "[3/4] 下载并校验资源包"
+  download_all_packs
 
-  echo "[4/4] 将汉化资源包加入整合包"
-  add_translate_pack
+  echo "[4/4] 将资源包加入整合包"
+  embed_packs
 
-  echo "已加入资源包: $TRANSLATE_PACK_NAME"
+  echo "已加入资源包: ${EMBEDDED_PACK_NAMES[*]}"
   echo "构建完成: $OUTPUT_PATH"
 }
 
