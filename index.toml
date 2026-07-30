@@ -216,11 +216,6 @@ hash = "cf7390cf06a861f7661222773371b429fce4fdd359240ca3c0eff20835471c0c"
 metafile = true
 
 [[files]]
-file = "mods/fancymenu.pw.toml"
-hash = "659d62e8479f856fa167e4c84721fee905ae3582710e1e49919cf6fa135a064b"
-metafile = true
-
-[[files]]
 file = "mods/farmers-delight.pw.toml"
 hash = "9aab64fbec4cc794817026caf84e7d0dff14ba3892da94aa0e00d23c84560499"
 metafile = true
