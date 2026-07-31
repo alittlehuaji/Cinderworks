@@ -175,7 +175,7 @@ declare -ra RESOURCE_PACKS=(
 
 - 仅支持从 **GitHub Releases** 拉取资源包，暂不支持直链或其它平台
 - 仅匹配最新正式 Release（`/releases/latest`），不含预发布
-- 资源包固定嵌入至 `client-overrides/resourcepacks/`，客户端会在游戏内自动加载
+- 资源包固定嵌入至 `client-overrides/resourcepacks/`。如需首次启动时启用某个资源包，还必须在 `client-overrides/options.txt` 的 `resourcePacks` 中加入对应的 `file/<资源包文件或目录名>` 标识
 - 要求 GitHub Release 的 asset 提供 `sha256` 摘要字段，否则报错
 - overrides 目录仅支持仓库内的 `client-overrides/` 与 `server-overrides/`，其它覆盖路径需扩展 `OVERRIDE_DIRS`
 - `.packwizignore` 必须同步排除 `OVERRIDE_DIRS` 中声明的目录，否则 packwiz 会重复索引导致路径冲突
