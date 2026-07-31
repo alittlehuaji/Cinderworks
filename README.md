@@ -7,7 +7,6 @@
 **Cinderworks** 是一个以 [Create](https://modrinth.com/mod/create) 为核心，并结合 Applied Energistics 2 与 Mekanism 的 Minecraft 整合包。它围绕机械动力、工业生产、物流仓储与自动化展开，同时保留适合长期生存和多人协作的探索、建造与生活内容
 
 ## Todo list
-- [ ] 覆盖默认游戏设置
 - [ ] 完善 Readme 模组列表
 - [ ] 完善服务端安装说明(Docs)
 
