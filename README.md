@@ -9,6 +9,10 @@
 ## Todo list
 - [ ] 完善 Readme 模组列表
 - [ ] 完善服务端安装说明(Docs)
+- [ ] 添一个自动发布脚本(自动从 pack.toml 读取版本号并更新 customwindowtitle-client.toml 减少手动同步负担)
+- [ ] 重构 build.sh 版本检查机制 (build.sh 版本标签检查过于宽松, 假设 customwindowtitle-client.toml 里有 v0.1.0-beta.33 但 pack.toml 是 v0.1.0-beta.3, build.sh 仍然会通过)
+- [ ] 完善 README (在 README 说明手动触发 workflow 不创建 release)
+- [ ] 重构构建脚本(资源包下载过于依赖外部 Github API)
 
 ## 基本信息
 
@@ -48,7 +52,7 @@ packwiz modrinth export
 
 ## 自动化构建脚本 `build.sh`
 
-`build.sh` 用于一键导出 Modrinth 整合包（`.mrpack`），并自动完成两类额外工作：从 GitHub Releases 拉取、校验并嵌入外部资源包（如汉化资源包）；将仓库的 `client-overrides/` 等覆盖目录以正确的顶层路径注入整合包。相比手动执行 `packwiz modrinth export`，脚本额外完成索引一致性校验、资源包下载与 SHA-256 校验、ZIP 完整性校验，以及 overrides 目录的手动注入
+`build.sh` 用于一键导出 Modrinth 整合包（`.mrpack`），并自动完成两类额外工作：从 GitHub Releases 拉取、校验并嵌入外部资源包（如汉化资源包）；将仓库的 `client-overrides/` 等覆盖目录以正确的顶层路径注入整合包。相比手动执行 `packwiz modrinth export`，脚本额外完成版本标签一致性校验、索引一致性校验、资源包下载与 SHA-256 校验、ZIP 完整性校验，以及 overrides 目录的手动注入
 
 ### 依赖
 
@@ -86,16 +90,32 @@ packwiz modrinth export
 
 ### 构建流程
 
-脚本固定执行 4 个阶段，每阶段失败即中止：
+脚本固定执行 5 个阶段，每阶段失败即中止：
 
 | 步骤 | 阶段 | 说明 |
 | --- | --- | --- |
-| `[1/4]` | 检查 Packwiz 索引 | 执行 `packwiz refresh` 并比对 `pack.toml`、`index.toml` 是否发生变化。若索引已过期（即 refresh 产生了未提交的变更），报错提示先提交变更再重试，避免导出与仓库状态不一致的产物 |
-| `[2/4]` | 导出 Modrinth 整合包 | 调用 `packwiz modrinth export` 生成基础 `.mrpack` |
-| `[3/4]` | 下载并校验资源包 | 逐个从配置的 GitHub Releases 下载资源包，校验 SHA-256 摘要与 ZIP 完整性后放入临时嵌入目录 |
-| `[4/4]` | 注入 overrides 与资源包 | 将仓库的 `client-overrides/`、`server-overrides/`（若存在）以顶层路径 `zip` 注入 `.mrpack`，随后注入已下载的资源包至 `client-overrides/resourcepacks/` |
+| `[1/5]` | 校验版本标签 | 从 `pack.toml` 读取 `version`，加上 `v` 前缀后检查所有声明文件是否包含该标签。文件缺失、版本字段无法读取或标签不一致都会中止构建 |
+| `[2/5]` | 检查 Packwiz 索引 | 执行 `packwiz refresh` 并比对 `pack.toml`、`index.toml` 是否发生变化。若索引已过期（即 refresh 产生了未提交的变更），报错提示先提交变更再重试，避免导出与仓库状态不一致的产物 |
+| `[3/5]` | 导出 Modrinth 整合包 | 调用 `packwiz modrinth export` 生成基础 `.mrpack` |
+| `[4/5]` | 下载并校验资源包 | 逐个从配置的 GitHub Releases 下载资源包，校验 SHA-256 摘要与 ZIP 完整性后放入临时嵌入目录 |
+| `[5/5]` | 注入 overrides 与资源包 | 将仓库的 `client-overrides/`、`server-overrides/`（若存在）以顶层路径 `zip` 注入 `.mrpack`，随后注入已下载的资源包至 `client-overrides/resourcepacks/` |
 
 构建结束后会打印实际嵌入的资源包文件名与最终产物路径
+
+### 版本标签校验
+
+`pack.toml` 的 `version` 是整合包版本的唯一来源。构建开始时，脚本为该版本添加 `v` 前缀，并校验指定文件中是否直接包含完整标签。例如 `version = "0.1.0-beta.3"` 时，待匹配标签为 `v0.1.0-beta.3`
+
+需校验的文件在脚本顶部的 `VERSION_TAG_FILES` 数组中集中维护：
+
+```bash
+readonly VERSION_TAG_PREFIX="v"
+declare -ra VERSION_TAG_FILES=(
+  "client-overrides/config/customwindowtitle-client.toml"
+)
+```
+
+如有其它配置、文本或脚本也需要同步版本，只需将相对路径追加到数组。文件不存在或未包含完整版本标签时，构建会在导出前终止并指出对应文件
 
 ### overrides 目录处理
 
