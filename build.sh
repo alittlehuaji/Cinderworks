@@ -19,6 +19,13 @@ declare -ra RESOURCE_PACKS=(
   "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack\.zip$"
 )
 
+# 版本标签校验：pack.toml 中的 version 是唯一版本来源
+# 每个文件都必须包含由前缀和该版本组成的完整标签
+readonly VERSION_TAG_PREFIX="v"
+declare -ra VERSION_TAG_FILES=(
+  "client-overrides/config/customwindowtitle-client.toml"
+)
+
 OUTPUT_PATH=""
 OUTPUT_ARCHIVE=""
 TEMP_DIR=""
@@ -29,6 +36,30 @@ declare -a EMBEDDED_PACK_NAMES=()
 die() {
   echo "错误: $*" >&2
   exit 1
+}
+
+# 校验配置文件中使用的版本标签与 pack.toml 保持一致
+check_version_tags() {
+  local line pack_version="" expected_tag version_file file_content
+
+  while IFS= read -r line; do
+    if [[ "$line" =~ ^[[:space:]]*version[[:space:]]*=[[:space:]]*\"([^\"]+)\" ]]; then
+      pack_version="${BASH_REMATCH[1]}"
+      break
+    fi
+  done < pack.toml
+
+  [[ -n "$pack_version" ]] || die "无法从 pack.toml 读取 version 字段"
+  expected_tag="${VERSION_TAG_PREFIX}${pack_version}"
+
+  for version_file in "${VERSION_TAG_FILES[@]}"; do
+    [[ -f "$version_file" ]] || die "版本标签校验文件不存在: $version_file"
+    file_content="$(< "$version_file")"
+    [[ "$file_content" == *"$expected_tag"* ]] ||
+      die "版本标签不一致: $version_file 中未找到 $expected_tag（来自 pack.toml）"
+  done
+
+  echo "版本标签校验通过: $expected_tag"
 }
 
 check_requirements() {
@@ -165,16 +196,19 @@ main() {
   TEMP_DIR="$(mktemp -d)"
   trap 'rm -rf -- "$TEMP_DIR"' EXIT
 
-  echo "[1/4] 检查 Packwiz 索引"
+  echo "[1/5] 校验版本标签"
+  check_version_tags
+
+  echo "[2/5] 检查 Packwiz 索引"
   refresh_index
 
-  echo "[2/4] 导出 Modrinth 整合包"
+  echo "[3/5] 导出 Modrinth 整合包"
   build_modpack
 
-  echo "[3/4] 下载并校验资源包"
+  echo "[4/5] 下载并校验资源包"
   download_all_packs
 
-  echo "[4/4] 注入 overrides 与资源包"
+  echo "[5/5] 注入 overrides 与资源包"
   embed_overrides
 
   echo "已加入资源包: ${EMBEDDED_PACK_NAMES[*]:-无}"
