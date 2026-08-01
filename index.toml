@@ -531,6 +531,11 @@ hash = "edda5333279b06528e2d1128d69bdeb5f55c0b446b95f1d766bf12938ad91039"
 metafile = true
 
 [[files]]
+file = "mods/tabtps.pw.toml"
+hash = "48986d45465dc02a17d0d935900af61a75d2e7a96d2add0d00ac08a7b546aee7"
+metafile = true
+
+[[files]]
 file = "mods/tectonic.pw.toml"
 hash = "fef2f8085bbdf6d398b02c87225ad9ccf9cc5d71edde13cd18e12a154764c84e"
 metafile = true
