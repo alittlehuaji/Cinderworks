@@ -196,11 +196,6 @@ hash = "41ddb2dfcf6b2d87bd52d0fb8dc9c8c3a7e3e83f9f1cbf9c495ab195333dfbd9"
 metafile = true
 
 [[files]]
-file = "mods/e4mc.pw.toml"
-hash = "e1e8a78328d41538ae90f1302537faf5142ed414370fb804ff821d1d1ae34315"
-metafile = true
-
-[[files]]
 file = "mods/easy-villagers.pw.toml"
 hash = "d629988991e4e0c461a5031b8c774c184ef409f5b57187211c3abe5b1a21fc3c"
 metafile = true
