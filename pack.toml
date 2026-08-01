@@ -1,12 +1,12 @@
 name = "Cinderworks"
 author = "alittlehuaji"
-version = "0.1.0-beta.2"
+version = "0.1.0-beta.3"
 pack-format = "packwiz:1.1.0"
 
 [index]
 file = "index.toml"
 hash-format = "sha256"
-hash = "c7b3a267f2187dee882084d0804116811e8678f915ee1662ca396938705edf45"
+hash = "e69d998010ccc97ee58cb3adf74e79a3e70d8a46c6fdf2a55647228f1efe9849"
 
 [versions]
 minecraft = "1.21.1"
