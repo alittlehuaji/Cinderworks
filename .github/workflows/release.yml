@@ -98,7 +98,7 @@ jobs:
           artifact_name="Cinderworks-${artifact_version}"
           echo "pack_version=$pack_version" >> "$GITHUB_OUTPUT"
           echo "artifact_name=$artifact_name" >> "$GITHUB_OUTPUT"
-          echo "artifact_path=build/${artifact_name}.mrpack" >> "$GITHUB_OUTPUT"
+          echo "artifact_path=build/Cinderworks.mrpack" >> "$GITHUB_OUTPUT"
 
       - name: 构建 Modrinth 整合包
         env:
@@ -140,7 +140,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          artifact_path="dist/${{ needs.build.outputs.artifact_name }}.mrpack"
+          artifact_path="dist/Cinderworks.mrpack"
           test -s "$artifact_path"
 
           args=(
