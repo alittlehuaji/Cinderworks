@@ -16,7 +16,7 @@ declare -ra OVERRIDE_DIRS=(
 # 资源包列表：每行一个，格式为 "名称|GitHub Releases API 地址|资源包文件名正则"
 # 新增资源包只需在此追加一行即可，无需改动其它逻辑
 declare -ra RESOURCE_PACKS=(
-  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack-.*\.zip$"
+  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack\.zip$"
 )
 
 OUTPUT_PATH=""

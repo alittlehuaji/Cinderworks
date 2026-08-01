@@ -146,7 +146,7 @@ declare -ra OVERRIDE_DIRS=(
 
 ```bash
 declare -ra RESOURCE_PACKS=(
-  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack-.*\.zip$"
+  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack\.zip$"
 )
 ```
 
@@ -154,7 +154,7 @@ declare -ra RESOURCE_PACKS=(
 
 ```bash
 declare -ra RESOURCE_PACKS=(
-  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack-.*\.zip$"
+  "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack\.zip$"
   "音乐包|https://api.github.com/repos/xxx/MusicPack/releases/latest|^MusicPack-.*\.zip$"
 )
 ```
