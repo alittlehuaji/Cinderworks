@@ -301,6 +301,16 @@ hash = "b6e0a61fea06f8d6d8e1672cf07b682625c4b74efd548d5093cd9c1fed167eec"
 metafile = true
 
 [[files]]
+file = "mods/jei.pw.toml"
+hash = "19d90c95fefa9a10f27598a931039f4b49b44a8410f7158d206bf4beb277d64a"
+metafile = true
+
+[[files]]
+file = "mods/justenoughcharacters.pw.toml"
+hash = "af733fa04a626e8d15f76a629bb51692255815a2d4160bd3ad91864dda07778a"
+metafile = true
+
+[[files]]
 file = "mods/konkrete.pw.toml"
 hash = "054a1887da4f14b791910660a2a7a2035ac1382461b881a65fe07b224c03735f"
 metafile = true
@@ -458,11 +468,6 @@ metafile = true
 [[files]]
 file = "mods/reeses-sodium-options.pw.toml"
 hash = "0f465bf38b13f887dbde506c859c9b5439ee9151ae5f3a98078b9f6c3a2c89ad"
-metafile = true
-
-[[files]]
-file = "mods/rei.pw.toml"
-hash = "21388a8519fbba93d4663a40bb163932855213ec47f41af18c1d3a4a1e2ada93"
 metafile = true
 
 [[files]]
