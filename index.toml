@@ -246,6 +246,11 @@ hash = "451c96f6fc12e0af29ddb579b69aa085420e638b23bbf24526997e9c7fb69dc7"
 metafile = true
 
 [[files]]
+file = "mods/fsu.pw.toml"
+hash = "41b65357479cf4750e6c952d3dc425a98f7dfb841af1ebfcb73b3544762161f4"
+metafile = true
+
+[[files]]
 file = "mods/ftb-essentials.pw.toml"
 hash = "6fa984dc1b5905ae909b417ed1cd92d6b536ba4832ed8c8d95aa9d424ad789df"
 metafile = true
