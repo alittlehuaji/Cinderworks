@@ -127,7 +127,7 @@ key_iris.keybind.toggleShaders:key.keyboard.k
 key_iris.keybind.shaderPackSelection:key.keyboard.o
 key_iris.keybind.wireframe:key.keyboard.unknown
 key_supplementaries.keybind.quiver:key.keyboard.v
-key_key.curios.open.desc:key.keyboard.g
+key_key.curios.open.desc:key.keyboard.unknown
 key_key.jei.toggleOverlay:key.keyboard.o:CONTROL
 key_key.jei.focusSearch:key.keyboard.f:CONTROL
 key_key.jei.previousPage:key.keyboard.unknown
