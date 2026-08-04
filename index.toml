@@ -86,6 +86,11 @@ hash = "af4dc4828902eae1784568632a749fe9a442943f1570ac0ba3ea75e79934be41"
 metafile = true
 
 [[files]]
+file = "mods/coreprotectneo.pw.toml"
+hash = "27b0db24fd47644b4c1ba0848b1adc372c228af68290089e2e8d8f48f0d1d863"
+metafile = true
+
+[[files]]
 file = "mods/create-central-kitchen.pw.toml"
 hash = "125fa69ac8e6e85c9d27a0ec13e575c09312c6e5fd2f97613fbcc85a19775a13"
 metafile = true
