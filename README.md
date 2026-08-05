@@ -15,11 +15,6 @@
 - [ ] 重构构建脚本(资源包下载过于依赖外部 Github API)
 - [ ] 创建 `server-overrides/` 时加入 `config/supplementaries-common.toml`，并设置 `tweaks.ai_tweaks.raiders_dismount_boats = false`
 
-## Next Version Plan
-- [ ] 通用机械系列
-  - <https://modrinth.com/mod/mekanism-tools>
-  - <https://modrinth.com/mod/mekanism-additions>
-
 ## 基本信息
 
 本项目基于 Minecraft 1.21.1与 NeoForge 21.1.235，使用 [Packwiz](https://packwiz.infra.link/) 作为管理工具
