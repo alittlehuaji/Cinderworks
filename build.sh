@@ -20,8 +20,7 @@ declare -ra RESOURCE_PACKS=(
 )
 
 # 版本标签校验：pack.toml 中的 version 是唯一版本来源
-# 每个文件都必须包含由前缀和该版本组成的完整标签
-readonly VERSION_TAG_PREFIX="v"
+# 每个文件都必须包含该版本号；v 前缀为可选（如 v1.2.0-beta.2 与 1.2.0-beta.2 均可）
 declare -ra VERSION_TAG_FILES=(
   "client-overrides/config/customwindowtitle-client.toml"
 )
@@ -50,7 +49,9 @@ check_version_tags() {
   done < pack.toml
 
   [[ -n "$pack_version" ]] || die "无法从 pack.toml 读取 version 字段"
-  expected_tag="${VERSION_TAG_PREFIX}${pack_version}"
+
+  # 直接校验版本号本身，兼容带 v 前缀与不带前缀两种写法
+  expected_tag="$pack_version"
 
   for version_file in "${VERSION_TAG_FILES[@]}"; do
     [[ -f "$version_file" ]] || die "版本标签校验文件不存在: $version_file"
