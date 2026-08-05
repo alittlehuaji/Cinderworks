@@ -41,6 +41,11 @@ hash = "e53392cab6393798f95c4ad012dcbd9a5a55d02ef2861ac0c23bee972686dddc"
 metafile = true
 
 [[files]]
+file = "mods/balm.pw.toml"
+hash = "f4ed8dbabc400434daa13b37041055261f3a74af387e4aea8ba8ca12ef142b4c"
+metafile = true
+
+[[files]]
 file = "mods/bellsandwhistles.pw.toml"
 hash = "e1f4a53e3e52b534add5dd018597fefd345d9bd6350b9c46ef0ec281fc62af8e"
 metafile = true
@@ -493,6 +498,11 @@ metafile = true
 [[files]]
 file = "mods/neocontinuity.pw.toml"
 hash = "8f35cebc29e664e9a3d840f6ce716e266470813c72b8ad2f2b64521e49739e2e"
+metafile = true
+
+[[files]]
+file = "mods/netherportalfix.pw.toml"
+hash = "5dc059422613b5645cb00e32d3bfd53de428c4939113d11ce2c844cb54165da6"
 metafile = true
 
 [[files]]
