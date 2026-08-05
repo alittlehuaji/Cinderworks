@@ -66,6 +66,11 @@ hash = "a85080c785e75b0bcddae3e14d7644d57e8eee0cf7ce4b670ee9e2bd2db6b886"
 metafile = true
 
 [[files]]
+file = "mods/chatanimation.pw.toml"
+hash = "e7b1b17efc6edcf454e6b48d8fb873031fdcc840e9bd9b7354af2cb08d67e6b4"
+metafile = true
+
+[[files]]
 file = "mods/chunky.pw.toml"
 hash = "1d5cc2b6dcfd1fc3adba4566b1c29b57ff1175316678c1f22e63cbc3e28a5ba0"
 metafile = true
