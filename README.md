@@ -15,6 +15,10 @@
 - [ ] 重构构建脚本(资源包下载过于依赖外部 Github API)
 - [ ] 创建 `server-overrides/` 时加入 `config/supplementaries-common.toml`，并设置 `tweaks.ai_tweaks.raiders_dismount_boats = false`
 
+## Next version plan
+- [ ] 添加 Create: Connected （等待解决此 issue <https://github.com/hlysine/create_connected/issues/300>）
+- [ ] 添加 Create: Contraption Terminals （等待解决此 issue <https://github.com/tom5454/Create-Contraption-Terminals/issues/10>）
+
 ## 基本信息
 
 本项目基于 Minecraft 1.21.1与 NeoForge 21.1.235，使用 [Packwiz](https://packwiz.infra.link/) 作为管理工具
