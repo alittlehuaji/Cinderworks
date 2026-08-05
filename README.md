@@ -21,7 +21,7 @@
 
 ## 基本信息
 
-本项目基于 Minecraft 1.21.1与 NeoForge 21.1.235，使用 [Packwiz](https://packwiz.infra.link/) 作为管理工具
+本项目基于 Minecraft 1.21.1与 NeoForge 21.1.238，使用 [Packwiz](https://packwiz.infra.link/) 作为管理工具
 
 ## 主要模组
 
