@@ -10,6 +10,34 @@
 
 本项目基于 Minecraft 1.21.1与 NeoForge 21.1.238，使用 [Packwiz](https://packwiz.infra.link/) 作为管理工具
 
+## 安装
+
+### 使用 Modrinth 启动器
+
+1. 下载本项目发布的 `.mrpack` 文件
+2. 在 Modrinth App 中选择导入整合包，并选择该文件
+3. 完成下载后启动实例
+
+### 使用其他启动器
+
+使用支持 Modrinth 整合包导入的启动器导入 `.mrpack`。请使用 Java 21，并保持 Minecraft 和 NeoForge 版本与上表一致
+
+## 本地维护与导出
+
+本仓库由 Packwiz 管理。安装 Packwiz 后，在仓库根目录执行：
+
+```sh
+# 将元数据变更写入索引
+packwiz refresh
+
+# 导出供启动器导入的 Modrinth 整合包
+packwiz modrinth export
+```
+
+模组的元数据保存在 `mods/*.pw.toml`，而 `pack.toml` 和 `index.toml` 是整合包的版本与索引来源。请通过 Packwiz 添加、更新或移除模组，避免直接手改索引
+
+详细信息请见 [Packwiz 文档](https://packwiz.infra.link)
+
 ## 主要模组
 
 > WIP - 本整合包仍在开发中，模组列表可能随时更改
@@ -182,34 +210,6 @@
 | Sophisticated Core | 依赖 | Sophisticated Backpacks 的核心库 | [modrinth.com/mod/sophisticated-core](https://modrinth.com/mod/sophisticated-core) |
 | Melody | 依赖 | 基于 OpenAL 的背景音乐播放库 | [modrinth.com/mod/melody](https://modrinth.com/mod/melody) |
 | DragonLib | 依赖 | 基于 Architectury API 的跨加载器模组库与开发框架 | [modrinth.com/mod/dragonlib](https://modrinth.com/mod/dragonlib) |
-
-## 安装
-
-### 使用 Modrinth 启动器
-
-1. 下载本项目发布的 `.mrpack` 文件
-2. 在 Modrinth App 中选择导入整合包，并选择该文件
-3. 完成下载后启动实例
-
-### 使用其他启动器
-
-使用支持 Modrinth 整合包导入的启动器导入 `.mrpack`。请使用 Java 21，并保持 Minecraft 和 NeoForge 版本与上表一致
-
-## 本地维护与导出
-
-本仓库由 Packwiz 管理。安装 Packwiz 后，在仓库根目录执行：
-
-```sh
-# 将元数据变更写入索引
-packwiz refresh
-
-# 导出供启动器导入的 Modrinth 整合包
-packwiz modrinth export
-```
-
-模组的元数据保存在 `mods/*.pw.toml`，而 `pack.toml` 和 `index.toml` 是整合包的版本与索引来源。请通过 Packwiz 添加、更新或移除模组，避免直接手改索引
-
-详细信息请见 [Packwiz 文档](https://packwiz.infra.link)
 
 ## 自动化构建脚本 `build.sh`
 
