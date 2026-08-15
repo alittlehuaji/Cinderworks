@@ -546,6 +546,11 @@ hash = "2dc5bf4118f932f3d328b163e1b97972964ac33e82c4eb89f2f122ef0661de7e"
 metafile = true
 
 [[files]]
+file = "mods/patchouli.pw.toml"
+hash = "d7f360ebb9f009d6dc0b368cd8fa399bdff70c0f6ef931687b2a35137f72715d"
+metafile = true
+
+[[files]]
 file = "mods/proxy-compatible-forge.pw.toml"
 hash = "5f5c428c2356afaf73018ea9c24fe90cb60e4c7ca1192aef47c2731de6fe0bf2"
 metafile = true
