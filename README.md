@@ -123,6 +123,8 @@ packwiz modrinth export
 | Easy Villagers | 内容 | 允许拾取村民，并提供交易、繁殖、铁农场等单方块设施 | [modrinth.com/mod/easy-villagers](https://modrinth.com/mod/easy-villagers) |
 | FallingTree | 辅助 | 支持整棵树一次性伐倒 | [modrinth.com/mod/fallingtree](https://modrinth.com/mod/fallingtree) |
 | RightClickHarvest | 辅助 | 右键收割成熟作物并自动重新种植 | [modrinth.com/mod/rightclickharvest](https://modrinth.com/mod/rightclickharvest) |
+| Net Music | 内容 | 游戏内 CD 播放器，可直接播放网易云流媒体音乐 | [modrinth.com/mod/net-music](https://modrinth.com/mod/net-music) |
+| Net Music: Better Login | 附属 | Net Music 附属，支持扫码登录网易云账号（`/nmbl login`） | [modrinth.com/mod/net-music-better-login](https://modrinth.com/mod/net-music-better-login) |
 
 ---
 
