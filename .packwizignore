@@ -6,6 +6,7 @@ tmp
 .gitattributes
 LICENSE
 README.md
+TODO.md
 build.sh
 client-overrides/
 server-overrides/
