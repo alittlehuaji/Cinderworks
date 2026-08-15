@@ -1,0 +1,13 @@
+name = "Create: FluidLogistic"
+filename = "fluidlogistics-1.2.7.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/g4AWLVIr/versions/wxemWsQ2/fluidlogistics-1.2.7.jar"
+hash-format = "sha512"
+hash = "31ec0e61580671c2a8e53f5da623ffddbaced886e4f6c147c0cfb27bd5a0b4b07e4f2f80b0651ae99e58e37156cb1aaf7929157366eba799cfe90493501377c0"
+
+[update]
+[update.modrinth]
+mod-id = "g4AWLVIr"
+version = "wxemWsQ2"
