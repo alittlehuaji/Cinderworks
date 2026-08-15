@@ -1,0 +1,13 @@
+name = "Net Music: Better Login"
+filename = "nmbl-1.0.4-neoforge-mc1.21.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/UxzhxiVl/versions/ZlH1lTYi/nmbl-1.0.4-neoforge-mc1.21.1.jar"
+hash-format = "sha512"
+hash = "ea29a3def0469461489d0c1ae13d41bb1d3b2a9ac883bdf4b52553148d9cf33fc33f8b6028137c2ee76d9199e89141942e82fcab9d5e97b2eedc7ca36766b913"
+
+[update]
+[update.modrinth]
+mod-id = "UxzhxiVl"
+version = "ZlH1lTYi"

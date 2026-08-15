@@ -546,6 +546,16 @@ hash = "8f35cebc29e664e9a3d840f6ce716e266470813c72b8ad2f2b64521e49739e2e"
 metafile = true
 
 [[files]]
+file = "mods/net-music-better-login.pw.toml"
+hash = "a553dae9018191fa01da2b1f0d25846f178c01e74eb882dbb263807064ab822c"
+metafile = true
+
+[[files]]
+file = "mods/net-music.pw.toml"
+hash = "dc1eeffbcc1048e7271148b2e42e7db108f0c878aac856aad4a2c0e925ab2295"
+metafile = true
+
+[[files]]
 file = "mods/netherportalfix.pw.toml"
 hash = "5dc059422613b5645cb00e32d3bfd53de428c4939113d11ce2c844cb54165da6"
 metafile = true
