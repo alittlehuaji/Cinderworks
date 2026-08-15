@@ -306,6 +306,11 @@ hash = "451c96f6fc12e0af29ddb579b69aa085420e638b23bbf24526997e9c7fb69dc7"
 metafile = true
 
 [[files]]
+file = "mods/framedblocks.pw.toml"
+hash = "20eee73cffcd55bfe041b16bbc3adc64c38859bf928486bf1db1368b6dba2058"
+metafile = true
+
+[[files]]
 file = "mods/fsu.pw.toml"
 hash = "41b65357479cf4750e6c952d3dc425a98f7dfb841af1ebfcb73b3544762161f4"
 metafile = true
