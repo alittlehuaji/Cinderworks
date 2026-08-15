@@ -451,6 +451,11 @@ hash = "2726c6991c3cc6ee3644725fd98759b6d8b2cfd96d0fcb7ad8e266924f741f52"
 metafile = true
 
 [[files]]
+file = "mods/maidusehandcrank.pw.toml"
+hash = "ba92f5ae92a9c91d696981d4b7ef723748b7e5f3578b331236d06ce137cf4e32"
+metafile = true
+
+[[files]]
 file = "mods/make_bubbles_pop.pw.toml"
 hash = "28d8aeaaa4e12098474b3028cf7dce0ef867de2f1a98fc6de2c224731e176fd3"
 metafile = true
