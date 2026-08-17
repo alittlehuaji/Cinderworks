@@ -2,9 +2,9 @@
 
 - [ ] 完善 Readme 模组列表
 - [ ] 完善服务端安装说明(Docs)
-- [ ] 添一个自动发布脚本(自动从 pack.toml 读取版本号并更新 customwindowtitle-client.toml 减少手动同步负担)
-- [ ] 重构 build.sh 版本检查机制 (build.sh 版本标签检查过于宽松, 假设 customwindowtitle-client.toml 里有 v0.1.0-beta.33 但 pack.toml 是 v0.1.0-beta.3, build.sh 仍然会通过)
-- [ ] 完善 README (在 README 说明手动触发 workflow 不创建 release)
+- [x] 添加自动发布脚本（自动从 pack.toml 读取版本号并更新 customwindowtitle-client.toml，减少手动同步负担）
+- [x] 重构 build.sh 版本检查机制（精确比较 pack.toml 与 customwindowtitle-client.toml 中的版本）
+- [x] 完善 README（说明手动触发 workflow 不创建 release）
 - [ ] 重构构建脚本(资源包下载过于依赖外部 Github API)
 - [ ] 创建 `server-overrides/` 时加入 `config/supplementaries-common.toml`，并设置 `tweaks.ai_tweaks.raiders_dismount_boats = false`
 

@@ -19,11 +19,8 @@ declare -ra RESOURCE_PACKS=(
   "汉化资源包|https://api.github.com/repos/alittlehuaji/Cinderworks-TranslatePack/releases/latest|^Cinderworks_TranslatePack\.zip$"
 )
 
-# 版本标签校验：pack.toml 中的 version 是唯一版本来源
-# 每个文件都必须包含该版本号；v 前缀为可选（如 v1.2.0-beta.2 与 1.2.0-beta.2 均可）
-declare -ra VERSION_TAG_FILES=(
-  "client-overrides/config/customwindowtitle-client.toml"
-)
+# pack.toml 中的 version 是唯一版本来源，窗口标题中的版本必须与其完全一致
+readonly WINDOW_TITLE_FILE="client-overrides/config/customwindowtitle-client.toml"
 
 OUTPUT_PATH=""
 OUTPUT_ARCHIVE=""
@@ -37,30 +34,29 @@ die() {
   exit 1
 }
 
-# 校验配置文件中使用的版本标签与 pack.toml 保持一致
+# 精确读取并校验窗口标题中的整合包版本
 check_version_tags() {
-  local line pack_version="" expected_tag version_file file_content
+  local pack_version
+  local -a pack_versions=()
+  local -a title_versions=()
 
-  while IFS= read -r line; do
-    if [[ "$line" =~ ^[[:space:]]*version[[:space:]]*=[[:space:]]*\"([^\"]+)\" ]]; then
-      pack_version="${BASH_REMATCH[1]}"
-      break
-    fi
-  done < pack.toml
+  mapfile -t pack_versions < <(
+    sed -nE 's/^version[[:space:]]*=[[:space:]]*"([^"]+)"[[:space:]]*$/\1/p' pack.toml
+  )
+  ((${#pack_versions[@]} == 1)) || die "pack.toml 中必须恰好包含一个有效的 version 字段"
+  pack_version="${pack_versions[0]}"
+  [[ -f "$WINDOW_TITLE_FILE" ]] || die "窗口标题配置不存在: $WINDOW_TITLE_FILE"
 
-  [[ -n "$pack_version" ]] || die "无法从 pack.toml 读取 version 字段"
+  mapfile -t title_versions < <(
+    sed -nE "s/^title[[:space:]]*=[[:space:]]*'Cinderworks ([^']+) based on Minecraft [^']*'[[:space:]]*$/\\1/p" \
+      "$WINDOW_TITLE_FILE"
+  )
+  ((${#title_versions[@]} == 1)) ||
+    die "$WINDOW_TITLE_FILE 中必须恰好包含一个符合格式的 title 字段"
+  [[ "${title_versions[0]}" == "$pack_version" ]] ||
+    die "版本标签不一致: $WINDOW_TITLE_FILE 使用 ${title_versions[0]}，pack.toml 使用 $pack_version"
 
-  # 直接校验版本号本身，兼容带 v 前缀与不带前缀两种写法
-  expected_tag="$pack_version"
-
-  for version_file in "${VERSION_TAG_FILES[@]}"; do
-    [[ -f "$version_file" ]] || die "版本标签校验文件不存在: $version_file"
-    file_content="$(< "$version_file")"
-    [[ "$file_content" == *"$expected_tag"* ]] ||
-      die "版本标签不一致: $version_file 中未找到 $expected_tag（来自 pack.toml）"
-  done
-
-  echo "版本标签校验通过: $expected_tag"
+  echo "版本标签校验通过: $pack_version"
 }
 
 check_requirements() {
@@ -70,7 +66,7 @@ check_requirements() {
     [[ -f "$item" ]] || die "缺少必要文件: $item"
   done
 
-  for item in packwiz curl jq unzip zip sha256sum cmp; do
+  for item in packwiz curl jq unzip zip sha256sum cmp sed; do
     command -v "$item" >/dev/null 2>&1 || die "未找到必要命令: $item"
   done
 }

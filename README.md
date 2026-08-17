@@ -213,6 +213,47 @@ packwiz modrinth export
 | Melody | 依赖 | 基于 OpenAL 的背景音乐播放库 | [modrinth.com/mod/melody](https://modrinth.com/mod/melody) |
 | DragonLib | 依赖 | 基于 Architectury API 的跨加载器模组库与开发框架 | [modrinth.com/mod/dragonlib](https://modrinth.com/mod/dragonlib) |
 
+## 自动发布脚本 `release.sh`
+
+`release.sh` 以 `pack.toml` 的 `version` 为唯一版本来源，自动同步窗口标题、刷新 Packwiz 索引、执行发布前构建，并创建本地发布提交与版本标签。各阶段由独立函数实现，任一阶段失败都会立即停止，且不会自动删除已经生成的版本文件改动
+
+### 发布前准备
+
+1. 在 `pack.toml` 中修改 `version`，版本必须符合 SemVer，例如 `1.3.0` 或 `1.3.0-beta.1`
+2. 确认除 `pack.toml`、`index.toml` 和窗口标题配置外没有未提交改动
+3. 确认本地已安装 `git`、`packwiz` 以及 `build.sh` 所需依赖
+
+### 用法
+
+```sh
+# 在本地创建发布提交和标签，检查无误后再手动推送
+./release.sh
+
+# 创建发布提交和标签，并原子推送当前分支与标签到 origin
+./release.sh --push
+```
+
+默认模式不会访问远程仓库。脚本完成后会输出对应的原子推送命令，标签使用 `v<version>` 格式，例如版本 `1.3.0` 对应标签 `v1.3.0`
+
+推送标签后，`.github/workflows/release.yml` 会构建 `.mrpack` 并创建 GitHub Release。通过 GitHub 页面手动触发该工作流时只会生成构建产物，不会创建 Release
+
+### 发布流程
+
+| 步骤 | 阶段 | 说明 |
+| --- | --- | --- |
+| `[1/10]` | 检查依赖 | 检查发布所需命令与项目文件 |
+| `[2/10]` | 检查 Git 仓库状态 | 拒绝 detached HEAD、未完成的 Git 操作、未跟踪文件和发布范围外的改动 |
+| `[3/10]` | 读取并校验版本 | 从 `pack.toml` 精确读取唯一的 `version` 字段并校验 SemVer |
+| `[4/10]` | 检查发布冲突 | 确认本地不存在同版本标签 |
+| `[5/10]` | 同步窗口标题 | 原子更新 `customwindowtitle-client.toml` 并重新读取结果进行精确校验 |
+| `[6/10]` | 刷新 Packwiz 索引 | 执行 `packwiz refresh` |
+| `[7/10]` | 验证版本文件 | 确认只修改了允许的发布文件，且两个版本字段完全一致 |
+| `[8/10]` | 执行发布前构建 | 调用 `build.sh` 在临时目录生成并验证 `.mrpack` |
+| `[9/10]` | 创建发布提交与标签 | 仅暂存允许的发布文件，提交信息形如 `chore: 更新版本至 v1.3.0` |
+| `[10/10]` | 推送发布 | 仅在指定 `--push` 时原子推送当前分支与版本标签 |
+
+脚本使用 Bash 严格模式和统一错误处理。预期的校验错误会显示当前阶段和具体原因，未预期的命令失败还会显示行号、命令与状态码；临时文件会自动清理，但工作区中的版本文件改动会保留，方便排查后重新执行。脚本不会调用 `git reset --hard` 或 `git clean`
+
 ## 自动化构建脚本 `build.sh`
 
 `build.sh` 用于一键导出 Modrinth 整合包（`.mrpack`），并自动完成两类额外工作：从 GitHub Releases 拉取、校验并嵌入外部资源包（如汉化资源包）；将仓库的 `client-overrides/` 等覆盖目录以正确的顶层路径注入整合包。相比手动执行 `packwiz modrinth export`，脚本额外完成版本标签一致性校验、索引一致性校验、资源包下载与 SHA-256 校验、ZIP 完整性校验，以及 overrides 目录的手动注入
@@ -257,7 +298,7 @@ packwiz modrinth export
 
 | 步骤 | 阶段 | 说明 |
 | --- | --- | --- |
-| `[1/5]` | 校验版本标签 | 从 `pack.toml` 读取 `version`，加上 `v` 前缀后检查所有声明文件是否包含该标签。文件缺失、版本字段无法读取或标签不一致都会中止构建 |
+| `[1/5]` | 校验版本标签 | 从 `pack.toml` 与窗口标题配置中分别提取版本并进行完整字符串比较。文件缺失、字段格式不正确或版本不一致都会中止构建 |
 | `[2/5]` | 检查 Packwiz 索引 | 执行 `packwiz refresh` 并比对 `pack.toml`、`index.toml` 是否发生变化。若索引已过期（即 refresh 产生了未提交的变更），报错提示先提交变更再重试，避免导出与仓库状态不一致的产物 |
 | `[3/5]` | 导出 Modrinth 整合包 | 调用 `packwiz modrinth export` 生成基础 `.mrpack` |
 | `[4/5]` | 下载并校验资源包 | 逐个从配置的 GitHub Releases 下载资源包，校验 SHA-256 摘要与 ZIP 完整性后放入临时嵌入目录 |
@@ -267,18 +308,15 @@ packwiz modrinth export
 
 ### 版本标签校验
 
-`pack.toml` 的 `version` 是整合包版本的唯一来源。构建开始时，脚本为该版本添加 `v` 前缀，并校验指定文件中是否直接包含完整标签。例如 `version = "0.1.0-beta.3"` 时，待匹配标签为 `v0.1.0-beta.3`
+`pack.toml` 的 `version` 是整合包版本的唯一来源。构建开始时，脚本从窗口标题的固定格式中提取版本，并与 `pack.toml` 进行完整字符串比较。因此 `1.2.0-beta.3` 不会误匹配 `1.2.0-beta.33`
 
-需校验的文件在脚本顶部的 `VERSION_TAG_FILES` 数组中集中维护：
+窗口标题配置路径在脚本顶部集中维护：
 
 ```bash
-readonly VERSION_TAG_PREFIX="v"
-declare -ra VERSION_TAG_FILES=(
-  "client-overrides/config/customwindowtitle-client.toml"
-)
+readonly WINDOW_TITLE_FILE="client-overrides/config/customwindowtitle-client.toml"
 ```
 
-如有其它配置、文本或脚本也需要同步版本，只需将相对路径追加到数组。文件不存在或未包含完整版本标签时，构建会在导出前终止并指出对应文件
+窗口标题必须保持 `Cinderworks <version> based on Minecraft ...` 格式。文件不存在、标题格式发生变化或提取出的版本与 `pack.toml` 不一致时，构建会在导出前终止
 
 ### overrides 目录处理
 
