@@ -48,7 +48,7 @@ mouseSensitivity:0.5
 damageTiltStrength:1.0
 highContrast:false
 narratorHotkey:true
-resourcePacks:["vanilla","mod_resources","moonlight:merged_pack","file/Cinderworks-Menu","mod/continuity:resourcepacks/default","file/Cinderworks_TranslatePack.zip"]
+resourcePacks:["vanilla","mod_resources","moonlight:merged_pack","mod/continuity:resourcepacks/default"]
 incompatibleResourcePacks:[]
 lastServer:
 lang:zh_cn
