@@ -211,6 +211,11 @@ hash = "5c39f1f605d68c64faf427aebef3abc0c2dd8b5c23d0403e5a7ee2bd7b4e9b19"
 metafile = true
 
 [[files]]
+file = "mods/createtreadmill.pw.toml"
+hash = "6439e91359d449f963634c0a1dcf56b34c462be7a2610e7e348fbb4cd93ef0c3"
+metafile = true
+
+[[files]]
 file = "mods/creativecore.pw.toml"
 hash = "d1dd0981cbd7ae9601c9c4603f88826b68a0c7e76fc12ef6bc80f08188d7dfb8"
 metafile = true

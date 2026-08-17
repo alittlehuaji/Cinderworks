@@ -1,0 +1,13 @@
+name = "Create:Treadmill"
+filename = "createtreadmill-1.16.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/N705v2dC/versions/fpJlOSn6/createtreadmill-1.16.jar"
+hash-format = "sha512"
+hash = "542176f182c3dc3bca42b556dfe6649637800580d350974e9b1c3a73e7ecec95a1bea08e794ca41e3421a67ed25308a783f661cd544251dc8e325baf8d725b6d"
+
+[update]
+[update.modrinth]
+mod-id = "N705v2dC"
+version = "fpJlOSn6"
