@@ -13,5 +13,13 @@
                 "top": 332
             }
         }
+    },
+    "com.tom.storagemod.screen.StorageTerminalScreen": {
+        "buttonHints": {
+            "SORT": {
+                "horizontalOffset": 19,
+                "top": 211
+            }
+        }
     }
 }
