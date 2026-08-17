@@ -1,5 +1,5 @@
 name = "BlueMap"
-filenam, = "bluemap-5.7-neoforge.jar"
+filename = "bluemap-5.7-neoforge.jar"
 side = "server"
 
 [download]
