@@ -30,19 +30,19 @@
 
 [extra_player_render]
 	#Whether to display player
-	DisablePlayerRender = true
+	DisablePlayerRender = false
 	#Player position x in screen
 	# Default: 10
 	# Range: > 0
-	PlayerPosX = 10
+	PlayerPosX = 580
 	#Player position y in screen
 	# Default: 10
 	# Range: > 0
-	PlayerPosY = 10
+	PlayerPosY = 254
 	#Player scale in screen
 	# Default: 40.0
 	# Range: 8.0 ~ 360.0
-	PlayerScale = 40.0
+	PlayerScale = 31.375
 	#Player yaw offset in screen
 	# Default: 5.0
 	# Range: 4.9E-324 ~ 1.7976931348623157E308
@@ -53,4 +53,4 @@
 	DisableLoadingStateScreen = false
 	#Loading state screen position
 	#Allowed Values: TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
-	LoadingStatePosition = "TOP_LEFT"
+	LoadingStatePosition = "TOP_CENTER"
